@@ -1,274 +1,233 @@
-📊 Projekt: System analizy klientów i prognozowania sprzedaży
+# 📊 System analizy klientów i prognozowania sprzedaży
 
-Technologie:
+## 🧩 Opis projektu
 
-Backend: Python + Flask
+System analizy klientów i prognozowania sprzedaży to **pełnostackowa aplikacja webowa**, która symuluje wewnętrzne narzędzie analityczne wykorzystywane w firmach **e‑commerce / SaaS**. Projekt łączy **backend we Flasku**, **modele Machine Learning (scikit‑learn)**, **bazę danych SQL** oraz **responsywny frontend oparty o Bootstrap**.
 
-ML: scikit-learn (Linear Regression, Logistic Regression)
+Celem aplikacji jest wsparcie decyzji biznesowych poprzez:
 
-Frontend: Bootstrap (eBootstrap)
+* analizę zachowań klientów,
+* prognozowanie przyszłej sprzedaży,
+* przewidywanie prawdopodobieństwa zakupu.
 
-Baza danych: PostgreSQL / SQLite (na start)
+Projekt został zaprojektowany w sposób zbliżony do realnych systemów komercyjnych.
 
-ORM: SQLAlchemy
+---
 
-🎯 Cel biznesowy projektu (jak w prawdziwej pracy)
+## 🎯 Cel biznesowy
 
-Celem systemu jest:
+System umożliwia firmie:
 
-Analiza danych klientów
+* **planowanie przychodów** na podstawie prognoz sprzedaży,
+* **segmentację klientów** według przewidywanej wartości,
+* **targetowanie kampanii marketingowych**,
+* **optymalizację kosztów reklam** poprzez analizę prawdopodobieństwa zakupu.
 
-Prognozowanie przyszłej sprzedaży (regresja liniowa)
+Dane i predykcje są dostępne w przejrzystym panelu webowym dla analityków i administratorów.
 
-Przewidywanie, czy klient dokona zakupu (regresja logistyczna)
+---
 
-Umożliwienie pracownikom firmy zarządzania danymi klientów i wynikami modeli ML przez panel webowy
+## 🛠️ Technologie
 
-Projekt symuluje wewnętrzne narzędzie analityczne używane np. w firmie e-commerce lub SaaS.
+### Backend
 
-🧠 Moduł Machine Learning (KLUCZOWY)
-1️⃣ Regresja liniowa – prognozowanie sprzedaży
+* **Python 3**
+* **Flask** – REST API
+* **SQLAlchemy** – ORM
+* **PostgreSQL / SQLite** (na start)
 
-Opis:
-Model regresji liniowej przewiduje wartość sprzedaży w kolejnym miesiącu na podstawie historycznych danych klienta.
+### Machine Learning
 
-Dane wejściowe (features):
+* **scikit‑learn**
 
-Liczba zakupów w ostatnich 30 dniach
+  * Linear Regression
+  * Logistic Regression
+* Normalizacja danych
+* Walidacja modeli
+* Zapisywanie i ładowanie modeli z plików
 
-Średnia wartość koszyka
+### Frontend
 
-Liczba wizyt na stronie
+* **Bootstrap (eBootstrap)**
+* HTML / CSS
+* (Opcjonalnie) **Chart.js** – wizualizacja danych
 
-Liczba dni od ostatniego zakupu
+---
 
-Staż klienta (w miesiącach)
+## 🧠 Moduł Machine Learning
 
-Dane wyjściowe (target):
+### 1️⃣ Regresja liniowa – prognozowanie sprzedaży
 
-Prognozowana wartość sprzedaży (PLN)
+**Cel:**
+Prognozowanie wartości sprzedaży klienta w kolejnym miesiącu.
 
-Funkcjonalności ML:
+**Dane wejściowe (features):**
 
-Trenowanie modelu na danych historycznych
+* Liczba zakupów w ostatnich 30 dniach
+* Średnia wartość koszyka
+* Liczba wizyt na stronie
+* Liczba dni od ostatniego zakupu
+* Staż klienta (w miesiącach)
 
-Normalizacja danych
+**Dane wyjściowe (target):**
 
-Walidacja modelu (R², MSE)
+* Prognozowana wartość sprzedaży (PLN)
 
-Zapisywanie modelu do pliku
+**Funkcjonalności:**
 
-Możliwość ponownego trenowania modelu z poziomu panelu admina
+* trenowanie modelu na danych historycznych,
+* normalizacja danych,
+* metryki: **R², MSE**,
+* zapis modelu do pliku,
+* możliwość ponownego trenowania z panelu admina.
 
-Zastosowanie biznesowe:
+---
 
-Planowanie przychodów
+### 2️⃣ Regresja logistyczna – przewidywanie zakupu
 
-Segmentacja klientów według przewidywanej wartości
+**Cel:**
+Określenie, czy klient dokona zakupu w ciągu najbliższych 14 dni.
 
-2️⃣ Regresja logistyczna – przewidywanie zakupu
+**Dane wejściowe:**
 
-Opis:
-Model klasyfikuje, czy klient dokona zakupu w ciągu najbliższych 14 dni.
+* Liczba wizyt w ostatnich 7 dniach
+* Otworzone newslettery (0/1)
+* Kliknięcia w reklamy
+* Historia zakupów (0/1)
+* Czas spędzony na stronie
 
-Dane wejściowe:
+**Dane wyjściowe:**
 
-Liczba wizyt w ostatnich 7 dniach
+* 0 – brak zakupu
+* 1 – zakup
 
-Otworzone newslettery (tak/nie)
+**Funkcjonalności:**
 
-Kliknięcia w reklamy
+* klasyfikacja binarna,
+* predykcja prawdopodobieństwa zakupu,
+* **Confusion Matrix**,
+* metryki: Accuracy, Precision, Recall,
+* próg decyzyjny (np. >70%).
 
-Historia zakupów (0/1)
+---
 
-Czas spędzony na stronie
+## 🗄️ Baza danych – struktura
 
-Dane wyjściowe:
+### users
 
-0 – brak zakupu
+* id
+* email
+* hasło (hash)
+* rola (admin / analityk)
 
-1 – zakup
+### clients
 
-Funkcjonalności ML:
+* id
+* imię
+* nazwisko
+* email
+* data rejestracji
+* staż klienta
 
-Klasyfikacja binarna
+### client_activity
 
-Predykcja prawdopodobieństwa zakupu
+* client_id
+* liczba wizyt
+* liczba zakupów
+* średnia wartość koszyka
+* dni od ostatniego zakupu
 
-Confusion Matrix
+### sales_predictions
 
-Accuracy, Precision, Recall
+* client_id
+* prognozowana sprzedaż
+* data predykcji
 
-Threshold do decyzji biznesowej (np. >70%)
+### purchase_predictions
 
-Zastosowanie biznesowe:
+* client_id
+* prawdopodobieństwo zakupu
+* decyzja (0/1)
 
-Kampanie marketingowe
+---
 
-Targetowanie klientów
+## 🌐 Backend – funkcjonalności
 
-Optymalizacja kosztów reklam
+* Autoryzacja i logowanie użytkowników
+* Role użytkowników (admin / analityk)
+* REST API (JSON)
+* Endpointy do:
 
-🗄️ Baza danych – struktura logiczna
-Tabele:
+  * dodawania i edycji klientów,
+  * uruchamiania predykcji ML,
+  * trenowania modeli ML,
+* walidacja danych wejściowych,
+* obsługa błędów i logowanie.
 
-users
+---
 
-id
+## 🎨 Frontend – widoki aplikacji
 
-email
+### 🔐 Strona logowania
 
-hasło (hash)
+* formularz email + hasło,
+* walidacja danych,
+* komunikaty błędów.
 
-rola (admin / analityk)
+### 📋 Dashboard główny
 
-clients
+* liczba klientów,
+* średnia prognozowana sprzedaż,
+* % klientów z wysokim prawdopodobieństwem zakupu,
+* wykres trendu sprzedaży.
 
-id
+### 👤 Lista klientów
 
-imię
+* tabela klientów,
+* prognoza sprzedaży,
+* prawdopodobieństwo zakupu,
+* filtrowanie i sortowanie.
 
-nazwisko
+### 📈 Szczegóły klienta
 
-email
+* dane klienta,
+* historia aktywności,
+* wyniki predykcji ML,
+* wizualizacja (progress bar).
 
-data rejestracji
+### 🤖 Panel ML (admin)
 
-staż klienta
+* trenowanie modeli ML,
+* wyświetlanie metryk,
+* informacja o ostatnim trenowaniu.
 
-client_activity
+---
 
-client_id
+## 🧪 Testowanie i jakość
 
-liczba wizyt
+* testy jednostkowe backendu,
+* walidacja danych wejściowych,
+* logowanie błędów,
+* czytelna struktura projektu.
 
-liczba zakupów
+---
 
-średnia wartość koszyka
+## 💼 Jak opisać projekt na rozmowie kwalifikacyjnej
 
-dni od ostatniego zakupu
+> „Zbudowałem system analityczny we Flasku, który wykorzystuje regresję liniową do prognozowania sprzedaży oraz regresję logistyczną do przewidywania zachowań klientów. Projekt obejmuje pełny stack: bazę danych, REST API, warstwę Machine Learning oraz responsywny frontend oparty o Bootstrap.”
 
-sales_predictions
+---
 
-client_id
+## 🚀 Możliwe rozszerzenia
 
-prognozowana sprzedaż
+* Docker + Docker Compose
+* CI/CD
+* Harmonogram trenowania modeli
+* Więcej modeli ML
+* Integracja z realnymi danymi
 
-data predykcji
+---
 
-purchase_predictions
+## 👨‍💻 Autor
 
-client_id
-
-prawdopodobieństwo zakupu
-
-decyzja (0/1)
-
-🌐 Backend (Flask) – wymagania
-Moduły aplikacji:
-
-Autoryzacja i logowanie
-
-API do:
-
-dodawania klientów
-
-edycji danych klientów
-
-uruchamiania predykcji ML
-
-Obsługa błędów i walidacja danych
-
-Integracja z modelem ML
-
-REST API (JSON)
-
-🎨 Frontend – wygląd i UX (Bootstrap)
-Styl:
-
-Kolorystyka: jasny dashboard (biały + niebieski)
-
-Responsywność (desktop + mobile)
-
-Spójne karty (Bootstrap Cards)
-
-Wykresy (np. Chart.js – opcjonalnie)
-
-Widoki aplikacji:
-🔐 1. Strona logowania
-
-Formularz email + hasło
-
-Walidacja danych
-
-Komunikaty błędów
-
-📋 2. Dashboard główny
-
-Karty:
-
-Liczba klientów
-
-Średnia prognozowana sprzedaż
-
-% klientów z wysokim prawdopodobieństwem zakupu
-
-Wykres trendu sprzedaży
-
-👤 3. Lista klientów
-
-Tabela:
-
-Imię, email
-
-Prognoza sprzedaży
-
-Prawdopodobieństwo zakupu
-
-Filtrowanie
-
-Sortowanie
-
-📈 4. Szczegóły klienta
-
-Dane klienta
-
-Historia aktywności
-
-Wyniki predykcji ML
-
-Wizualizacja (progress bar dla prawdopodobieństwa zakupu)
-
-🤖 5. Panel ML (admin)
-
-Przycisk „Trenuj model regresji liniowej”
-
-Przycisk „Trenuj model logistyczny”
-
-Wyświetlanie metryk modeli
-
-Informacja o ostatnim trenowaniu
-
-🧪 Testowanie i jakość
-
-Testy jednostkowe backendu
-
-Walidacja danych wejściowych
-
-Logowanie błędów
-
-💼 Jak to sprzedać na rozmowie?
-
-„Zbudowałem system analityczny we Flasku, który wykorzystuje regresję liniową do prognozowania sprzedaży oraz regresję logistyczną do przewidywania zachowań klientów. Projekt obejmuje pełny stack: bazę danych, REST API, warstwę ML oraz responsywny frontend oparty o Bootstrap.”
-
-Jeśli chcesz:
-
-📄 opis do README
-
-🗂️ rozpisanie user stories
-
-🧩 diagram architektury
-
-🎯 wersję „na zaliczenie” albo „pod juniora”
-
-to daj znać 👍
+Projekt edukacyjny / portfolio – przygotowany z myślą o **stanowisku Junior Python / ML / Backend Developer**.
