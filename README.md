@@ -48,7 +48,6 @@ Dane i predykcje są dostępne w przejrzystym panelu webowym dla analityków i a
 
 ### Frontend
 
-* **Bootstrap (eBootstrap)**
 * HTML / CSS
 * (Opcjonalnie) **Chart.js** – wizualizacja danych
 
