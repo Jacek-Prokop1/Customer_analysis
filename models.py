@@ -9,3 +9,4 @@ class Users(db.Model):
     password = db.Column(db.String(128), nullable=False)
     # 0 = Analist, 1 = Admin
     role = db.Column(db.Integer, nullable=False, default=0)
+

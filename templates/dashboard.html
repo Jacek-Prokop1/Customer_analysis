@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Rejestracja</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { background-color: gray;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Rejestracja użytkownika</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('dashboard.dashboard') }}">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Hasło" required>
+            <input type="password" name="confirm_password" placeholder="Potwierdź hasło" required>
+            <input type="number" name="role" placeholder="0 = Analist, 1 = Admin" min="0" max="1" required>
+            <button type="submit">Zarejestruj</button>
+        </form>
+    </div>
+</body>
+</html>
