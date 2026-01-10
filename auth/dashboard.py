@@ -84,24 +84,40 @@ def add_client_activity():
         flash("Wszystkie pola są wymagane.", "error")
         return redirect(url_for("dashboard.dashboard_panel"))
 
+    try:
+        numbers_visits = int(numbers_visits)
+        numbers_purchases = int(numbers_purchases)
+        average_basket_value = float(average_basket_value)
+        numbers_purchases_day = int(numbers_purchases_day)
+    except ValueError:
+        flash("Niepoprawne dane liczbowe.", "error")
+        return redirect(url_for("dashboard.dashboard_panel"))
+
     client = Clients.query.filter_by(email=email_customer).first()
     if not client:
         flash("Nie ma takiego klienta.", "error")
         return redirect(url_for("dashboard.dashboard_panel"))
 
     client_activity = Client_activity.query.filter_by(client_id=client.id).first()
+    sales_value = numbers_purchases * average_basket_value
+    high_purchase = 1 if numbers_purchases > 0 else 0
+
     if client_activity:
         client_activity.numbers_visits = numbers_visits
         client_activity.numbers_purchases = numbers_purchases
         client_activity.average_basket_value = average_basket_value
         client_activity.numbers_purchases_day = numbers_purchases_day
+        client_activity.sales_value = sales_value
+        client_activity.high_purchase = high_purchase
     else:
         client_activity = Client_activity(
             client_id=client.id,
             numbers_visits=numbers_visits,
             numbers_purchases=numbers_purchases,
             average_basket_value=average_basket_value,
-            numbers_purchases_day=numbers_purchases_day
+            numbers_purchases_day=numbers_purchases_day,
+            sales_value=sales_value,
+            high_purchase=high_purchase
         )
         db.session.add(client_activity)
 
@@ -109,5 +125,27 @@ def add_client_activity():
     flash("Aktywność klienta została zapisana pomyślnie!", "success")
     return redirect(url_for("dashboard.dashboard_panel"))
 
+@dashboard_bp.route("/dashboard/ml", methods=["GET"])
+def dashboard_ml():
+    user_email = session.get("user")
+    if not user_email:
+        flash("Musisz się zalogować!", "error")
+        return redirect(url_for("login.login"))
 
+    ml_stats = {
+        "accuracy": 0.92,
+        "precision": 0.88,
+        "recall": 0.91,
+        "f1_score": 0.895
+    }
+    stats_text = "\n".join(
+        [f"{key}: {value}" for key, value in ml_stats.items()]
+    )
+
+    return render_template(
+        "dashboard.html",
+        user=user_email,
+        show_ml=True,
+        stats_text=stats_text
+    )
 

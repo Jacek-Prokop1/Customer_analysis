@@ -29,6 +29,8 @@ class Client_activity(db.Model):
     numbers_purchases = db.Column(db.Integer, nullable=False, default=0)
     average_basket_value = db.Column(db.Float, nullable=False, default=0.0)
     numbers_purchases_day = db.Column(db.Integer, nullable=False, default=0)
+    sales_value = db.Column(db.Float, nullable=True)
+    high_purchase = db.Column(db.Integer, nullable=False, default=0)
 
     client = db.relationship('Clients', backref='activities')
 

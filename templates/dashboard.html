@@ -43,6 +43,15 @@
         <input type="number" name="numbers_purchases_day" placeholder="Dni od ostatniego zakupu" min="0" required>
         <button type="submit">Dodaj aktywność klienta</button>
     </form>
+    <a href="{{ url_for('dashboard.dashboard_ml') }}">
+    <button type="button">Pokaż statystyki ML</button>
+</a>
+    {% if show_ml is defined and show_ml %}
+    <h1>Statystyki modelu ML</h1>
+    {% for line in stats_text.split('\n') %}
+        {{ line }}<br>
+    {% endfor %}
+    {% endif %}
 </div>
 </body>
 </html>
