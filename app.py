@@ -16,6 +16,7 @@ app.register_blueprint(login_bp)
 app.register_blueprint(dashboard_bp)
 
 with app.app_context():
+    print(123)
     db.create_all()
     if not Users.query.filter_by(email="test@example.com").first():
         user = Users(email="test@example.com", password=generate_password_hash("haslo123"), role=0)

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from models import db, Users, Clients
+from models import db, Users, Clients, Client_activity
 from werkzeug.security import generate_password_hash
 
 dashboard_bp = Blueprint("dashboard", __name__, template_folder="templates")
@@ -47,11 +47,6 @@ def register_user():
 
 @dashboard_bp.route("/dashboard/add_client", methods=["POST"])
 def add_client():
-    user_email = session.get("user")
-    if not user_email:
-        flash("Musisz się zalogować!", "error")
-        return redirect(url_for("login.login"))
-
     first_name = request.form.get("first_name", "").strip()
     last_name = request.form.get("last_name", "").strip()
     email = request.form.get("email", "").strip()
@@ -76,3 +71,43 @@ def add_client():
 
     flash("Klient został dodany pomyślnie!", "success")
     return redirect(url_for("dashboard.dashboard_panel"))
+
+@dashboard_bp.route("/dashboard/add_client_activity", methods=["POST"])
+def add_client_activity():
+    email_customer = request.form.get("email_customer", "").strip()
+    numbers_visits = request.form.get("numbers_visits", "").strip()
+    numbers_purchases = request.form.get("numbers_purchases", "").strip()
+    average_basket_value = request.form.get("average_basket_value", "").strip()
+    numbers_purchases_day = request.form.get("numbers_purchases_day", "").strip()
+
+    if not email_customer or not numbers_visits or not numbers_purchases or not average_basket_value or not numbers_purchases_day:
+        flash("Wszystkie pola są wymagane.", "error")
+        return redirect(url_for("dashboard.dashboard_panel"))
+
+    client = Clients.query.filter_by(email=email_customer).first()
+    if not client:
+        flash("Nie ma takiego klienta.", "error")
+        return redirect(url_for("dashboard.dashboard_panel"))
+
+    client_activity = Client_activity.query.filter_by(client_id=client.id).first()
+    if client_activity:
+        client_activity.numbers_visits = numbers_visits
+        client_activity.numbers_purchases = numbers_purchases
+        client_activity.average_basket_value = average_basket_value
+        client_activity.numbers_purchases_day = numbers_purchases_day
+    else:
+        client_activity = Client_activity(
+            client_id=client.id,
+            numbers_visits=numbers_visits,
+            numbers_purchases=numbers_purchases,
+            average_basket_value=average_basket_value,
+            numbers_purchases_day=numbers_purchases_day
+        )
+        db.session.add(client_activity)
+
+    db.session.commit()
+    flash("Aktywność klienta została zapisana pomyślnie!", "success")
+    return redirect(url_for("dashboard.dashboard_panel"))
+
+
+

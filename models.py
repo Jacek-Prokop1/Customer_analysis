@@ -19,3 +19,17 @@ class Clients(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     registration_date = db.Column(db.DateTime, default=datetime.utcnow)
     client_tenure = db.Column(db.Integer, nullable=False, default=0)
+
+
+class Client_activity(db.Model):
+    __tablename__ = "client_activity"
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
+    numbers_visits = db.Column(db.Integer, nullable=False, default=0)
+    numbers_purchases = db.Column(db.Integer, nullable=False, default=0)
+    average_basket_value = db.Column(db.Float, nullable=False, default=0.0)
+    numbers_purchases_day = db.Column(db.Integer, nullable=False, default=0)
+
+    client = db.relationship('Clients', backref='activities')
+
+
