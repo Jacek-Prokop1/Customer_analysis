@@ -5,7 +5,7 @@
     <title>Dashboard - Rejestracja</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body { background-color: gray;}
+        body { background-color: gray; }
     </style>
 </head>
 <body>
@@ -18,12 +18,20 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        <form method="POST" action="{{ url_for('dashboard.dashboard') }}">
+        <form method="POST" action="{{ url_for('dashboard.register_user') }}">
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Hasło" required>
             <input type="password" name="confirm_password" placeholder="Potwierdź hasło" required>
             <input type="number" name="role" placeholder="0 = Analist, 1 = Admin" min="0" max="1" required>
             <button type="submit">Zarejestruj</button>
+        </form>
+        <h2>Dodaj klienta</h2>
+        <form method="POST" action="{{ url_for('dashboard.add_client') }}">
+            <input type="text" name="first_name" placeholder="Imię" required>
+            <input type="text" name="last_name" placeholder="Nazwisko" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="number" name="client_tenure" placeholder="Staż klienta (lata)" min="0" required>
+            <button type="submit">Dodaj klienta</button>
         </form>
     </div>
 </body>
