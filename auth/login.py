@@ -23,7 +23,7 @@ def login():
             if user and check_password_hash(user.password, password):
                 flash("Zalogowano pomyślnie!", "success")
                 session["user"] = user.email
-                return redirect(url_for("dashboard.dashboard"))
+                return redirect(url_for("dashboard.dashboard_panel"))
             else:
                 errors["form"] = "Nieprawidłowy email lub hasło."
 

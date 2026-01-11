@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body { background-color: gray; }
+        input, button { margin: 5px 0; padding: 5px; }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>Panel użytkownika: {{ user }}</h2>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -18,6 +20,7 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+
     <h3>Rejestracja użytkownika</h3>
     <form method="POST" action="{{ url_for('dashboard.register_user') }}">
         <input type="email" name="email" placeholder="Email" required>
@@ -26,6 +29,7 @@
         <input type="number" name="role" placeholder="0 = Analist, 1 = Admin" min="0" max="1" required>
         <button type="submit">Zarejestruj</button>
     </form>
+
     <h3>Dodaj klienta</h3>
     <form method="POST" action="{{ url_for('dashboard.add_client') }}">
         <input type="text" name="first_name" placeholder="Imię" required>
@@ -34,23 +38,28 @@
         <input type="number" name="client_tenure" placeholder="Staż klienta (lata)" min="0" required>
         <button type="submit">Dodaj klienta</button>
     </form>
+
     <h3>Dodaj aktywność klienta</h3>
     <form method="POST" action="{{ url_for('dashboard.add_client_activity') }}">
-        <input type="emial" name="email_customer" placeholder="emial customer" required>
+        <input type="email" name="email_customer" placeholder="Email klienta" required>
         <input type="number" name="numbers_visits" placeholder="Liczba wizyt" required>
         <input type="number" name="numbers_purchases" placeholder="Liczba zakupów" required>
         <input type="number" name="average_basket_value" placeholder="Średnia wartość koszyka" min="0" step="any" required>
         <input type="number" name="numbers_purchases_day" placeholder="Dni od ostatniego zakupu" min="0" required>
         <button type="submit">Dodaj aktywność klienta</button>
     </form>
-    <a href="{{ url_for('dashboard.dashboard_ml') }}">
-    <button type="button">Pokaż statystyki ML</button>
-</a>
-    {% if show_ml is defined and show_ml %}
-    <h1>Statystyki modelu ML</h1>
-    {% for line in stats_text.split('\n') %}
-        {{ line }}<br>
-    {% endfor %}
+
+    <h3>Wyświetl statystyki ML dla klienta</h3>
+    <form method="GET" action="{{ url_for('dashboard.dashboard_ml') }}">
+        <input type="email" name="client_email" placeholder="Email klienta" required>
+        <button type="submit">Pokaż statystyki ML</button>
+    </form>
+    {% if y_pred is not none %}
+    <h3>Prognoza ML</h3>
+    <p>Przewidywana wartość:</p>
+    <strong>{{ y_pred[0] }}</strong>
+    {% else %}
+    <p>Brak danych do przewidzenia.</p>
     {% endif %}
 </div>
 </body>
